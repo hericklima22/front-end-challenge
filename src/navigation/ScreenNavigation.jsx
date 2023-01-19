@@ -1,19 +1,22 @@
 import React, { useContext } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { HomeScreen, LoginScreen, RegisterScreen } from '../screens'
+import { HomeScreen, LoginScreen, RegisterScreen, SplashScreen } from '../screens'
 import { AuthContext } from '../context/AuthContext'
 
 const Stack = createNativeStackNavigator()
 
 export const ScreenNavigation = () => {
-  const { userData } = useContext(AuthContext)
+  const { userData, splashLoading } = useContext(AuthContext)
 
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {console.error(userData?.headers?.authorization)}
-        {userData?.headers?.authorization ? (
+        {splashLoading ? 
+        (
+          <Stack.Screen name="SplashSreen" component= {SplashScreen} options={{headerShown: false}} />
+        ) : 
+        userData?.headers?.authorization ? (
           <Stack.Screen name='HomeScreen' component={HomeScreen} />
         ) : (
           <>
@@ -21,7 +24,9 @@ export const ScreenNavigation = () => {
           <Stack.Screen name='LoginScreen' component={LoginScreen} />
           <Stack.Screen name='RegisterScreen' component={RegisterScreen} />
           </>
-        )}
+        )
+        }
+        
 
       
         

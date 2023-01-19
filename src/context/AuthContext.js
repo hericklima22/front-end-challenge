@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { BASE_URL } from '../config'
 import { AsyncStorage } from 'react-native'
 
@@ -8,6 +8,7 @@ export const AuthContext = createContext()
 export const AuthProvider = ({children}) => {
   const [isLoading, setIsLoading] = useState(false)
   const [userData, setUserData] = useState({})
+  const [splashLoading, setSplashLoading] = useState(false)
 
   const register = (email, password, role) => {
     const body = JSON.stringify({"user": {email, password, role}})
@@ -45,9 +46,29 @@ export const AuthProvider = ({children}) => {
     })
   }
 
+  const isLoggedIn = async () => {
+    try {
+      setSplashLoading(true)
+
+      let userData = await AsyncStorage.getItem('userData')
+      userData = JSON.parse(userData)
+
+      if(userData) {
+        setUserData(userData)
+      }
+      setSplashLoading(false)
+    } catch(err) {
+      setSplashLoading(false)
+      console.warn(`Nao esta logado ${err}`)
+    }
+  }
+
+  useEffect(() => {
+    isLoggedIn()
+  }, []) 
 
   return (
-    <AuthContext.Provider value={{register, login, isLoading, userData}}>
+    <AuthContext.Provider value={{register, login, isLoading, userData, splashLoading}}>
       {children}
     </AuthContext.Provider>
   )
