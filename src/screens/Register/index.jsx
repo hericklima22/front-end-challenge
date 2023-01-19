@@ -9,9 +9,11 @@ export const RegisterScreen = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [role, setRole] = useState("")
-
+  
   return (
     <View>
+      <Text>Tela de registro</Text>
+      
       <TextInput 
         value={email}
         placeholder="Email"
@@ -37,7 +39,6 @@ export const RegisterScreen = () => {
       />
 
 
-      <Text>Tela de registro</Text>
     </View>
   )
 }
